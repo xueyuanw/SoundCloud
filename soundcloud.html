@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SoundCloud Player</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+		body {
+			background-color: lightgray;
+		}
+		#container {
+			width: 700px;
+			height: 500px;
+			margin: auto;
+			background-color: #6b2e6b;
+			border-radius: 20px;
+			overflow: hidden;
+		}
+
+		#box {
+			width: 660px;
+			height: 460px;
+			margin: 17px auto;
+			background-color: #f2f2f2;
+			border: 3px solid #ec9513;
+			border-radius: 20px;
+
+		}
+
+	</style>
+</head>
+<body>
+	
+	<div id='container'>
+		<div id='box'>
+			<div id='player'></div>
+		</div>
+	</div>	
+
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
+	<script>
+		SC.initialize({
+		  client_id: '4c287b463aac243f4f34900279196437'
+		});
+
+		var track_url = 'http://soundcloud.com/forss/flickermood';
+
+
+		SC.oEmbed(track_url, { auto_play: true }, document.querySelector('#player')).then(function(oEmbed) {
+	  		document.getElementById('player').innerHTML = oEmbed.html;
+		});
+
+	</script>
+</body>
+</html>
