@@ -7,15 +7,24 @@
 		body {
 			background-color: lightgray;
 		}
-		#container {
+
+		#scContainer {
 			width: 700px;
 			height: 500px;
 			margin: auto;
 			background-color: #6b2e6b;
-			border-radius: 20px;
+			border-radius: 0 0 20px 20px;
 			overflow: hidden;
 		}
-
+		#genre {
+			width: 700px;
+			height: 150px;
+			margin: auto;
+			background-color: #6b2e6b;
+			border-radius: 20px 20px 0 0;
+			text-align: center;
+			padding-top: 12px;
+		}
 		#box {
 			width: 660px;
 			height: 460px;
@@ -25,14 +34,50 @@
 			border-radius: 20px;
 
 		}
+		#player, iframe {
+			height: 200px;
+			width: 500px;
+			display: block;
+			text-align: center;
+			margin: 0 auto;
+			margin-top: 20px;
+		}
+
+		.genreButton {
+			background-color: lightgrey; /* Green */
+		    border: none;
+		    color: white;
+		    opacity: 0.6;
+		    padding: 8px 12px;
+		    text-align: center;
+		    font-size: 14px;
+		    border-radius: 20px;
+		}
+		.shadow {
+   			opacity: 0.9;
+   			color: black;
+		}
 
 	</style>
 </head>
 <body>
 	
 	<div id='container'>
-		<div id='box'>
-			<div id='player'></div>
+		<div id='genre'>
+			<button class='genreButton'>Acoustic</button>
+			<button class='genreButton'>Electronic </button>
+			<button class='genreButton'>Hip Hop</button>
+			<button class='genreButton'>Jazz</button>
+			<button class='genreButton'>Rock</button>
+			<button class='genreButton'>Alternative</button>
+			<button class='genreButton'>Classical</button>
+		</div>
+		<div id='scContainer'>
+			<div id='box'>
+				<div id='player'>
+					
+				</div>
+			</div>
 		</div>
 	</div>	
 
@@ -49,6 +94,12 @@
 		SC.oEmbed(track_url, { auto_play: true }, document.querySelector('#player')).then(function(oEmbed) {
 	  		document.getElementById('player').innerHTML = oEmbed.html;
 		});
+
+		$('.genreButton').click(function(){
+			$(this).toggleClass('shadow');
+			console.log(this);
+		});
+
 
 	</script>
 </body>
