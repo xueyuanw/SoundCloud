@@ -8,21 +8,21 @@
 			background-color: lightgray;
 		}
 
-		#scContainer {
+		#container{
 			width: 700px;
-			height: 500px;
+			background-color: green;
 			margin: auto;
 			background-color: #6b2e6b;
-			border-radius: 0 0 20px 20px;
+			border-radius: 20px;
+			text-align: center;
+		}
+
+		#scContainer {
+			height: 500px;
 			overflow: hidden;
 		}
 		#genre {
-			width: 700px;
-			height: 150px;
-			margin: auto;
-			background-color: #6b2e6b;
-			border-radius: 20px 20px 0 0;
-			text-align: center;
+			height: 90px;
 			padding-top: 12px;
 		}
 		#box {
@@ -42,7 +42,13 @@
 			margin: 0 auto;
 			margin-top: 20px;
 		}
-
+		#searchButton{
+			background-color: #f2f2f2;
+			color: black;
+			width: 124px;
+			height: 24px;
+			border-radius: 20px;
+		}
 		.genreButton {
 			background-color: lightgrey; /* Green */
 		    border: none;
@@ -52,6 +58,10 @@
 		    text-align: center;
 		    font-size: 14px;
 		    border-radius: 20px;
+		    cursor: default;
+		}
+		.genreButton:hover{
+			cursor: pointer;
 		}
 		.shadow {
    			opacity: 0.9;
@@ -65,13 +75,14 @@
 	<div id='container'>
 		<div id='genre'>
 			<button class='genreButton'>Acoustic</button>
-			<button class='genreButton'>Electronic </button>
+			<button class='genreButton'>Electronic</button>
 			<button class='genreButton'>Hip Hop</button>
 			<button class='genreButton'>Jazz</button>
 			<button class='genreButton'>Rock</button>
 			<button class='genreButton'>Alternative</button>
 			<button class='genreButton'>Classical</button>
 		</div>
+		<button id='searchButton' onclick="search();"> Search </button>
 		<div id='scContainer'>
 			<div id='box'>
 				<div id='player'>
@@ -84,21 +95,57 @@
 	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	<script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
 	<script>
+		var genres = [];
 		SC.initialize({
 		  client_id: '4c287b463aac243f4f34900279196437'
 		});
 
-		var track_url = 'http://soundcloud.com/forss/flickermood';
+		// var track_url = 'http://soundcloud.com/forss/flickermood';
 
 
-		SC.oEmbed(track_url, { auto_play: true }, document.querySelector('#player')).then(function(oEmbed) {
-	  		document.getElementById('player').innerHTML = oEmbed.html;
-		});
+		// SC.oEmbed(track_url, document.querySelector('#player')).then(function(oEmbed) {
+	 //  		document.getElementById('player').innerHTML = oEmbed.html;
+		// });
+		embedPlayerWithURL('http://soundcloud.com/forss/flickermood');
 
 		$('.genreButton').click(function(){
+			if (this.classList.contains('shadow')){
+				var index = genres.indexOf(this.innerHTML);
+				if(index > -1) {
+					genres.splice(index, 1);
+				}
+			}
+			else {
+				genres.push(this.innerHTML);
+			}
 			$(this).toggleClass('shadow');
-			console.log(this);
 		});
+
+		function search(){
+			console.log("Searching...");
+
+			var genreString = "";
+			for(var i=0; i < genres.length; i++){
+				genreString += genres[i];
+				genreString += ', ';
+			}
+			console.log(genreString);
+
+			SC.get('/tracks', {genre: genreString}).then(function(tracks){
+				console.log(tracks);
+				var trackID = Math.floor(Math.random()*tracks.length);
+				console.log(tracks[trackID].title);
+				console.log(tracks[trackID].uri);
+				var trackURL = tracks[trackID].uri;
+				embedPlayerWithURL(trackURL);
+			});
+		}
+
+		function embedPlayerWithURL(trackURL){
+			SC.oEmbed(trackURL, document.querySelector('#player')).then(function(oEmbed) {
+	  			document.getElementById('player').innerHTML = oEmbed.html;
+			});
+		}
 
 
 	</script>
